@@ -6,6 +6,7 @@ public class Carrero : ModuleRules
     public Carrero(ReadOnlyTargetRules Target) : base(Target)
     {
         PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
+        CppStandard = CppStandardVersion.Latest;
 
         PublicDependencyModuleNames.AddRange(new string[] {
             "Core",
@@ -60,9 +61,27 @@ public class Carrero : ModuleRules
         // CGAL (header-only library)
         string CGALPath = Path.Combine(ModuleDirectory, "../../ThirdParty/CGAL");
         string CGALIncludePath = Path.Combine(CGALPath, "include");
-        
+        string CGALGmpIncludePath = Path.Combine(CGALPath, "gmp", "include");
+
         // Handles subdirectories conveniently
         PublicIncludePaths.Add(CGALIncludePath);
+        if (Directory.Exists(CGALGmpIncludePath))
+        {
+            PublicIncludePaths.Add(CGALGmpIncludePath);
+        }
+        #endregion
+
+        #region Boost
+        string BoostIncludeDir = System.Environment.GetEnvironmentVariable("BOOST_INCLUDEDIR");
+        string BoostLibraryDir = System.Environment.GetEnvironmentVariable("BOOST_LIBRARYDIR");
+        if (!string.IsNullOrWhiteSpace(BoostIncludeDir) && Directory.Exists(BoostIncludeDir))
+        {
+            PublicIncludePaths.Add(BoostIncludeDir);
+        }
+        if (!string.IsNullOrWhiteSpace(BoostLibraryDir) && Directory.Exists(BoostLibraryDir))
+        {
+            PublicSystemLibraryPaths.Add(BoostLibraryDir);
+        }
         #endregion
     }
 }
