@@ -1,6 +1,10 @@
 #include "ViewerPlayerController.h"
 
 #include "Framework/Application/SlateApplication.h"
+#include "InputCoreTypes.h"
+#include "Components/InputComponent.h"
+#include "Engine/World.h"
+#include "MeshActor.h"
 #include "ViewerPawn.h"
 
 AViewerPlayerController::AViewerPlayerController()
@@ -107,5 +111,32 @@ void AViewerPlayerController::ApplyInputMode(bool bIsDragging)
 		InputMode.SetHideCursorDuringCapture(false);
 		SetInputMode(InputMode);
 		bShowMouseCursor = true;
+	}
+}
+
+void AViewerPlayerController::HandleMeshPathSelected(const FString& Path)
+{
+	UWorld* World = GetWorld();
+	if (!World)
+	{
+		return;
+	}
+
+	// Create mesh actor and load from path
+	AMeshActor* ViewerActor = MeshActor.Get();
+	if (!ViewerActor)
+	{
+		ViewerActor = World->SpawnActor<AMeshActor>();
+		MeshActor = ViewerActor;
+	}
+
+	// Load mesh & process it
+	if (ViewerActor->LoadMeshFromFile(Path))
+	{
+		if (AViewerPawn* ViewerPawn = Cast<AViewerPawn>(GetPawn()))
+		{
+			// Orbit camera around mesh center
+			ViewerPawn->SetOrbitTarget(ViewerActor->GetMeshBounds().Origin);
+		}
 	}
 }

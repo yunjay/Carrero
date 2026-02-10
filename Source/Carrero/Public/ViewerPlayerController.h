@@ -13,6 +13,7 @@ class CARRERO_API AViewerPlayerController : public APlayerController
 
 public:
 	AViewerPlayerController();
+	void HandleMeshPathSelected(const FString& Path);
 
 protected:
 	virtual void BeginPlay() override;
@@ -27,6 +28,7 @@ private:
 	void HandleMouseWheel(float Value);
 	void ApplyInputMode(bool bIsDragging);
 
+	TWeakObjectPtr<class AMeshActor> MeshActor;
 	bool bIsOrbiting;
 	bool bIsPanning;
 };
