@@ -71,9 +71,11 @@ Saved/*
 # Compiled source files for the engine to use
 Intermediate/*
 Plugins/**/Intermediate/*
-enc_temp_folder/*
-
-Content/
 
 # Cache files for the editor to use
 DerivedDataCache/*
+
+enc_temp_folder/*
+Content/*
+Config/*
+Carrero.uproject
