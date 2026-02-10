@@ -2,6 +2,7 @@
 
 #include "Framework/Application/SlateApplication.h"
 #include "GenericPlatform/GenericWindow.h"
+#include "Styling/CoreStyle.h"
 #include "Widgets/Input/SButton.h"
 #include "Widgets/Layout/SBorder.h"
 #include "Widgets/Layout/SBox.h"
@@ -20,6 +21,9 @@
 
 void SObjectViewerHUDWidget::Construct(const FArguments& InArgs)
 {
+	OnMeshPathSelected = InArgs._OnMeshPathSelected;
+	const FSlateFontInfo DefaultFont = FCoreStyle::GetDefaultFontStyle("Regular", 16); // DPI is automatic
+
 	ChildSlot
 	[
 		SNew(SBox)
@@ -37,6 +41,7 @@ void SObjectViewerHUDWidget::Construct(const FArguments& InArgs)
 				[
 					SNew(STextBlock)
 					.Text(LOCTEXT("CarreroTitle", "Carrero Visualizer"))
+					.Font(DefaultFont)
 				]
 				+ SVerticalBox::Slot()
 				.AutoHeight()
@@ -44,14 +49,19 @@ void SObjectViewerHUDWidget::Construct(const FArguments& InArgs)
 				[
 					SNew(STextBlock)
 					.Text(this, &SObjectViewerHUDWidget::GetSelectedFileText)
+					.Font(DefaultFont)
 				]
 				+ SVerticalBox::Slot()
 				.AutoHeight()
 				.Padding(0.0f, 6.0f, 0.0f, 0.0f)
 				[
 					SNew(SButton)
-					.Text(LOCTEXT("OpenMeshButton", "Open Mesh"))
 					.OnClicked(this, &SObjectViewerHUDWidget::OnOpenMeshClicked)
+					[
+						SNew(STextBlock)
+						.Text(LOCTEXT("OpenMeshButton", "Open Mesh"))
+						.Font(DefaultFont)
+					]
 				]
 			]
 		]
@@ -109,6 +119,7 @@ FReply SObjectViewerHUDWidget::OnOpenMeshClicked()
 			{
 				SelectedFilePath = SelectedPath;
 				::CoTaskMemFree(SelectedPath);
+				OnMeshPathSelected.ExecuteIfBound(SelectedFilePath);
 			}
 		}
 	}

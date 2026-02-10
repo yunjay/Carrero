@@ -16,6 +16,8 @@ public:
 	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 
 private:
+	void HandleMeshPathSelected(const FString& Path);
+
 	TSharedPtr<SObjectViewerHUDWidget> HudWidget;
 	TSharedPtr<SWidget> HudWidgetContainer;
 };

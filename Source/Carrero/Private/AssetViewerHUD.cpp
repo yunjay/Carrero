@@ -3,6 +3,7 @@
 #include "Engine/Engine.h"
 #include "Engine/GameViewportClient.h"
 #include "SObjectViewerHUDWidget.h"
+#include "ViewerPlayerController.h"
 #include "Widgets/SWeakWidget.h"
 
 void AAssetViewerHUD::BeginPlay()
@@ -12,7 +13,8 @@ void AAssetViewerHUD::BeginPlay()
 	if (GEngine && GEngine->GameViewport)
 	{
 		// Create and add the HUD widget to the viewport
-		SAssignNew(HudWidget, SObjectViewerHUDWidget);
+		SAssignNew(HudWidget, SObjectViewerHUDWidget)
+			.OnMeshPathSelected(FOnMeshPathSelected::CreateUObject(this, &AAssetViewerHUD::HandleMeshPathSelected));
 		HudWidgetContainer = SNew(SWeakWidget).PossiblyNullContent(HudWidget.ToSharedRef());
 		GEngine->GameViewport->AddViewportWidgetContent(HudWidgetContainer.ToSharedRef(), 0);
 	}
@@ -29,4 +31,12 @@ void AAssetViewerHUD::EndPlay(const EEndPlayReason::Type EndPlayReason)
 	HudWidgetContainer.Reset();
 
 	Super::EndPlay(EndPlayReason);
+}
+
+void AAssetViewerHUD::HandleMeshPathSelected(const FString& Path)
+{
+	if (AViewerPlayerController* ViewerController = Cast<AViewerPlayerController>(GetOwningPlayerController()))
+	{
+		ViewerController->HandleMeshPathSelected(Path);
+	}
 }
