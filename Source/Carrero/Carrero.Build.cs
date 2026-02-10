@@ -50,8 +50,8 @@ public class Carrero : ModuleRules
             
             // Runtime dependency for DLL
             string AssimpDLL = Path.Combine(AssimpBinPath, "assimp-vc143-mt.dll");
-            RuntimeDependencies.Add(AssimpDLL);
-            
+            RuntimeDependencies.Add("$(BinaryOutputDir)/assimp-vc143-mt.dll", AssimpDLL);
+
             // Delay load seems to be best practice
             PublicDelayLoadDLLs.Add("assimp-vc143-mt.dll");
         }
@@ -69,6 +69,11 @@ public class Carrero : ModuleRules
         {
             PublicIncludePaths.Add(CGALGmpIncludePath);
         }
+        PublicDefinitions.AddRange(new string[]
+            {
+            "CGAL_HEADER_ONLY=1",
+            "CGAL_NOT_HEADER_ONLY=0"
+        });
         #endregion
 
         #region Boost
