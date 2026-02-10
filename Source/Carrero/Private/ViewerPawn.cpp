@@ -25,7 +25,7 @@ AViewerPawn::AViewerPawn()
 	OrbitSpeed = 0.25f;
 	PanSpeed = 0.75f;
 	ZoomSpeed = 25.0f;
-	MinZoom = 50.0f;
+	MinZoom = 5.0f;
 	MaxZoom = 2000.0f;
 }
 
@@ -54,7 +54,10 @@ void AViewerPawn::Pan(const FVector2D& Delta)
 
 void AViewerPawn::Zoom(float Delta)
 {
-	SpringArm->TargetArmLength = FMath::Clamp(SpringArm->TargetArmLength + Delta * ZoomSpeed, MinZoom, MaxZoom);
+	// SpringArm->TargetArmLength = FMath::Clamp(SpringArm->TargetArmLength + Delta * ZoomSpeed, MinZoom, MaxZoom);
+	const float Distance = SpringArm->TargetArmLength;
+	const float DistanceScale = FMath::Max(0.1f, Distance / 300.0f);
+	SpringArm->TargetArmLength = FMath::Clamp(Distance + Delta * ZoomSpeed * DistanceScale, MinZoom, MaxZoom);
 }
 
 void AViewerPawn::SetOrbitTarget(const FVector& NewTarget)
