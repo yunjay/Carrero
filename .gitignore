@@ -77,5 +77,6 @@ DerivedDataCache/*
 
 enc_temp_folder/*
 Content/*
-Config/*
 Carrero.uproject
+# Config/*
+
