@@ -17,7 +17,10 @@ public:
 private:
 	FReply OnOpenMeshClicked();
 	FText GetSelectedFileText() const;
+	FText GetLoadingText() const;
+	EVisibility GetLoadingVisibility() const;
 
 	FOnMeshPathSelected OnMeshPathSelected;
 	FString SelectedFilePath;
+	bool bIsLoading = false;
 };

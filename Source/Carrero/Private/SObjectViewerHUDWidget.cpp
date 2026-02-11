@@ -1,5 +1,6 @@
 #include "SObjectViewerHUDWidget.h"
 
+#include "Containers/Ticker.h"
 #include "Framework/Application/SlateApplication.h"
 #include "GenericPlatform/GenericWindow.h"
 #include "Styling/CoreStyle.h"
@@ -49,6 +50,15 @@ void SObjectViewerHUDWidget::Construct(const FArguments& InArgs)
 				[
 					SNew(STextBlock)
 					.Text(this, &SObjectViewerHUDWidget::GetSelectedFileText)
+					.Font(DefaultFont)
+				]
+				+ SVerticalBox::Slot()
+				.AutoHeight()
+				.Padding(0.0f, 6.0f, 0.0f, 0.0f)
+				[
+					SNew(STextBlock)
+					.Text(this, &SObjectViewerHUDWidget::GetLoadingText)
+					.Visibility(this, &SObjectViewerHUDWidget::GetLoadingVisibility)
 					.Font(DefaultFont)
 				]
 				+ SVerticalBox::Slot()
@@ -119,7 +129,19 @@ FReply SObjectViewerHUDWidget::OnOpenMeshClicked()
 			{
 				SelectedFilePath = SelectedPath;
 				::CoTaskMemFree(SelectedPath);
-				OnMeshPathSelected.ExecuteIfBound(SelectedFilePath);
+
+				bIsLoading = true;
+				TWeakPtr<SObjectViewerHUDWidget> WidgetWeakPtr = SharedThis(this);
+				const FString SelectedPathCopy = SelectedFilePath;
+				FTSTicker::GetCoreTicker().AddTicker(FTickerDelegate::CreateLambda([WidgetWeakPtr, SelectedPathCopy](float)
+				{
+					if (TSharedPtr<SObjectViewerHUDWidget> Pinned = WidgetWeakPtr.Pin())
+					{
+						Pinned->OnMeshPathSelected.ExecuteIfBound(SelectedPathCopy);
+						Pinned->bIsLoading = false;
+					}
+					return false;
+				}));
 			}
 		}
 	}
@@ -141,6 +163,16 @@ FText SObjectViewerHUDWidget::GetSelectedFileText() const
 	}
 
 	return FText::FromString(SelectedFilePath);
+}
+
+FText SObjectViewerHUDWidget::GetLoadingText() const
+{
+	return LOCTEXT("LoadingMeshLabel", "Loading mesh...");
+}
+
+EVisibility SObjectViewerHUDWidget::GetLoadingVisibility() const
+{
+	return bIsLoading ? EVisibility::Visible : EVisibility::Collapsed;
 }
 
 #undef LOCTEXT_NAMESPACE
