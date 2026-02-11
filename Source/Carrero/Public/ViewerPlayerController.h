@@ -25,10 +25,14 @@ private:
 	void EndOrbit();
 	void BeginPan();
 	void EndPan();
+	void BeginRotateMesh();
+	void EndRotateMesh();
 	void HandleMouseWheel(float Value);
 	void ApplyInputMode(bool bIsDragging);
 
 	TWeakObjectPtr<class AMeshActor> MeshActor;
 	bool bIsOrbiting;
 	bool bIsPanning;
+	bool bIsRotatingMesh;
+	float MeshRotateSpeed;
 };
