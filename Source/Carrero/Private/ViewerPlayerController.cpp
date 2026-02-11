@@ -10,6 +10,8 @@
 AViewerPlayerController::AViewerPlayerController()
 	: bIsOrbiting(false)
 	, bIsPanning(false)
+	, bIsRotatingMesh(false)
+	, MeshRotateSpeed(1.5f)
 {
 	bShowMouseCursor = true;
 	bEnableClickEvents = true;
@@ -27,6 +29,8 @@ void AViewerPlayerController::SetupInputComponent()
 {
 	Super::SetupInputComponent();
 
+	InputComponent->BindKey(EKeys::LeftMouseButton, IE_Pressed, this, &AViewerPlayerController::BeginRotateMesh);
+	InputComponent->BindKey(EKeys::LeftMouseButton, IE_Released, this, &AViewerPlayerController::EndRotateMesh);
 	InputComponent->BindKey(EKeys::RightMouseButton, IE_Pressed, this, &AViewerPlayerController::BeginOrbit);
 	InputComponent->BindKey(EKeys::RightMouseButton, IE_Released, this, &AViewerPlayerController::EndOrbit);
 	InputComponent->BindKey(EKeys::MiddleMouseButton, IE_Pressed, this, &AViewerPlayerController::BeginPan);
@@ -48,7 +52,15 @@ void AViewerPlayerController::PlayerTick(float DeltaTime)
 		return;
 	}
 
-	if (bIsOrbiting)
+	if (bIsRotatingMesh)
+	{
+		if (AMeshActor* ViewerActor = MeshActor.Get())
+		{
+			const FRotator DeltaRotation(-DeltaY * MeshRotateSpeed, -DeltaX * MeshRotateSpeed, 0.0f);
+			ViewerActor->AddActorWorldRotation(DeltaRotation);
+		}
+	}
+	else if (bIsOrbiting)
 	{
 		ViewerPawn->Orbit(FVector2D(DeltaX, DeltaY));
 	}
@@ -67,7 +79,7 @@ void AViewerPlayerController::BeginOrbit()
 void AViewerPlayerController::EndOrbit()
 {
 	bIsOrbiting = false;
-	ApplyInputMode(bIsPanning);
+	ApplyInputMode(bIsPanning || bIsRotatingMesh);
 }
 
 void AViewerPlayerController::BeginPan()
@@ -79,7 +91,19 @@ void AViewerPlayerController::BeginPan()
 void AViewerPlayerController::EndPan()
 {
 	bIsPanning = false;
-	ApplyInputMode(bIsOrbiting);
+	ApplyInputMode(bIsOrbiting || bIsRotatingMesh);
+}
+
+void AViewerPlayerController::BeginRotateMesh()
+{
+	bIsRotatingMesh = true;
+	ApplyInputMode(true);
+}
+
+void AViewerPlayerController::EndRotateMesh()
+{
+	bIsRotatingMesh = false;
+	ApplyInputMode(bIsOrbiting || bIsPanning);
 }
 
 void AViewerPlayerController::HandleMouseWheel(float Value)
