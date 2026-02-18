@@ -1,7 +1,7 @@
 #include "CarreroGameMode.h"
-#include "AssetViewerHUD.h"
-#include "ViewerPawn.h"
-#include "ViewerPlayerController.h"
+#include "UI/AssetViewerHUD.h"
+#include "Viewer/ViewerPawn.h"
+#include "Viewer/ViewerPlayerController.h"
 
 ACarreroGameMode::ACarreroGameMode()
 {

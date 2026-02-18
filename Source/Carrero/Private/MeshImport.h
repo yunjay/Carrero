@@ -10,6 +10,7 @@ struct FImportedMeshData
 	TArray<FVector3f> Normals;
 	TArray<FVector3f> Tangents;
 	TArray<FVector2f> UVs;
+	TArray<FColor> Colors; // Prof Carrero's .ply's have them.
 	TArray<int32> Indices;
 	FBox Bounds = FBox(ForceInit);
 };

@@ -1,11 +1,11 @@
-#include "ViewerPlayerController.h"
+#include "Viewer/ViewerPlayerController.h"
 
 #include "Framework/Application/SlateApplication.h"
 #include "InputCoreTypes.h"
 #include "Components/InputComponent.h"
 #include "Engine/World.h"
-#include "MeshActor.h"
-#include "ViewerPawn.h"
+#include "Viewer/MeshActor.h"
+#include "Viewer/ViewerPawn.h"
 
 AViewerPlayerController::AViewerPlayerController()
 	: bIsOrbiting(false)

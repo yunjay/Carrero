@@ -33,6 +33,9 @@ bool FMeshImport::LoadMesh(const FString& FilePath, FImportedMeshData& OutMeshDa
 	OutMeshData.Normals.Reserve(Mesh->mNumVertices);
 	OutMeshData.Tangents.Reserve(Mesh->mNumVertices);
 	OutMeshData.UVs.Reserve(Mesh->mNumVertices);
+	OutMeshData.Colors.Reserve(Mesh->mNumVertices);
+
+	const bool bHasColors = Mesh->HasVertexColors(0);
 
 	for (unsigned int VertexIndex = 0; VertexIndex < Mesh->mNumVertices; ++VertexIndex)
 	{
@@ -67,6 +70,20 @@ bool FMeshImport::LoadMesh(const FString& FilePath, FImportedMeshData& OutMeshDa
 		else
 		{
 			OutMeshData.UVs.Add(FVector2f::ZeroVector);
+		}
+
+		if (bHasColors)
+		{
+			const aiColor4D& Color = Mesh->mColors[0][VertexIndex];
+			OutMeshData.Colors.Add(FColor(
+				static_cast<uint8>(FMath::Clamp(Color.r, 0.0f, 1.0f) * 255.0f),
+				static_cast<uint8>(FMath::Clamp(Color.g, 0.0f, 1.0f) * 255.0f),
+				static_cast<uint8>(FMath::Clamp(Color.b, 0.0f, 1.0f) * 255.0f),
+				static_cast<uint8>(FMath::Clamp(Color.a, 0.0f, 1.0f) * 255.0f)));
+		}
+		else
+		{
+			OutMeshData.Colors.Add(FColor::White);
 		}
 
 		OutMeshData.Bounds += FVector(Position.x, Position.y, Position.z);

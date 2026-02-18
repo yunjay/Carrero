@@ -1,9 +1,9 @@
-#include "AssetViewerHUD.h"
+#include "UI/AssetViewerHUD.h"
 
 #include "Engine/Engine.h"
 #include "Engine/GameViewportClient.h"
-#include "SObjectViewerHUDWidget.h"
-#include "ViewerPlayerController.h"
+#include "UI/SObjectViewerHUDWidget.h"
+#include "Viewer/ViewerPlayerController.h"
 #include "Widgets/SWeakWidget.h"
 
 void AAssetViewerHUD::BeginPlay()

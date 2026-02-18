@@ -1,4 +1,4 @@
-#include "MeshActor.h"
+#include "Viewer/MeshActor.h"
 
 #include "MeshImport.h"
 #include "RealtimeMeshComponent.h"
@@ -45,6 +45,7 @@ bool AMeshActor::LoadMeshFromFile(const FString& FilePath)
 	TRealtimeMeshBuilderLocal<uint32, FPackedNormal, FVector2DHalf, 1> Builder(StreamSet);
 	Builder.EnableTangents();
 	Builder.EnableTexCoords();
+	Builder.EnableColors();
 	Builder.EnablePolyGroups();
 
 	for (int32 VertexIndex = 0; VertexIndex < MeshData.Positions.Num(); ++VertexIndex)
@@ -53,10 +54,12 @@ bool AMeshActor::LoadMeshFromFile(const FString& FilePath)
 		const FVector3f Normal = MeshData.Normals.IsValidIndex(VertexIndex) ? MeshData.Normals[VertexIndex] : FVector3f::UpVector;
 		const FVector3f Tangent = MeshData.Tangents.IsValidIndex(VertexIndex) ? MeshData.Tangents[VertexIndex] : FVector3f::CrossProduct(Normal, FVector3f::RightVector);
 		const FVector2f UV = MeshData.UVs.IsValidIndex(VertexIndex) ? MeshData.UVs[VertexIndex] : FVector2f::ZeroVector;
+		const FColor Color = MeshData.Colors.IsValidIndex(VertexIndex) ? MeshData.Colors[VertexIndex] : FColor::White;
 
 		Builder.AddVertex(Position)
 			.SetNormalAndTangent(Normal, Tangent)
-			.SetTexCoord(UV);
+			.SetTexCoord(UV)
+			.SetColor(Color);
 	}
 
 	for (int32 Index = 0; Index + 2 < MeshData.Indices.Num(); Index += 3)

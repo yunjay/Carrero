@@ -1,4 +1,4 @@
-#include "ViewerPawn.h"
+#include "Viewer/ViewerPawn.h"
 
 #include "Camera/CameraComponent.h"
 #include "GameFramework/SpringArmComponent.h"
