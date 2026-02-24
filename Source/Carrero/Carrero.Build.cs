@@ -26,7 +26,9 @@ public class Carrero : ModuleRules
             // UI
             "Slate",
             "SlateCore",
-            "UMG"
+            "UMG",
+            // Rendering
+            "CarreroRender"
         });
 
         PrivateDependencyModuleNames.AddRange(new string[] {

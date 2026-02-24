@@ -1,0 +1,24 @@
+{
+	"FileVersion": 3,
+	"Version": 1,
+	"VersionName": "1.0",
+	"FriendlyName": "CarreroRender",
+	"Description": "",
+	"Category": "Other",
+	"CreatedBy": "YunjayKim",
+	"CreatedByURL": "",
+	"DocsURL": "",
+	"MarketplaceURL": "",
+	"SupportURL": "",
+	"CanContainContent": true,
+	"IsBetaVersion": false,
+	"IsExperimentalVersion": false,
+	"Installed": false,
+	"Modules": [
+		{
+			"Name": "CarreroRender",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
+		}
+	]
+}
