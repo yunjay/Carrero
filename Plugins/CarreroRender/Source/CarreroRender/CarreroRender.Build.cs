@@ -26,11 +26,11 @@ public class CarreroRender : ModuleRules
 			new string[]
 			{
 				"Core",
-				// ... add other public dependencies that you statically link with here ...
+				"Renderer",   // FSceneViewExtensionBase is in public headers
 			}
 			);
-			
-		
+
+
 		PrivateDependencyModuleNames.AddRange(
 			new string[]
 			{
@@ -38,7 +38,9 @@ public class CarreroRender : ModuleRules
 				"Engine",
 				"Slate",
 				"SlateCore",
-				// ... add private dependencies that you statically link with here ...	
+				"RenderCore",
+				"RHI",
+				"Projects",
 			}
 			);
 		

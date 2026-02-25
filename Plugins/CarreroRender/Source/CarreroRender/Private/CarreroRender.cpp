@@ -10,7 +10,7 @@ void FCarreroRenderModule::StartupModule()
 	// Add shaders directory
 	auto thisPlugin = IPluginManager::Get().FindPlugin(TEXT("CarreroRender"));
 	auto thisShadersDir = FPaths::Combine(thisPlugin->GetBaseDir(), TEXT("Shaders"));
-	AddShaderSourceDirectoryMapping(TEXT("/Shaders"), thisShadersDir);
+	AddShaderSourceDirectoryMapping(TEXT("/CarreroRender"), thisShadersDir);
 
 	// Subsystem gets instantiated declaratively.
 }
