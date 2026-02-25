@@ -11,6 +11,8 @@ void FCarreroRenderModule::StartupModule()
 	auto thisPlugin = IPluginManager::Get().FindPlugin(TEXT("CarreroRender"));
 	auto thisShadersDir = FPaths::Combine(thisPlugin->GetBaseDir(), TEXT("Shaders"));
 	AddShaderSourceDirectoryMapping(TEXT("/Shaders"), thisShadersDir);
+
+	// Subsystem gets instantiated declaratively.
 }
 
 void FCarreroRenderModule::ShutdownModule()

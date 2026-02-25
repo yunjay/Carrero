@@ -9,4 +9,9 @@ public:
 	// IModuleInterface
 	virtual void StartupModule() override;
 	virtual void ShutdownModule() override;
+
+	static FCarreroRenderModule& Get()
+	{
+		return FModuleManager::LoadModuleChecked<FCarreroRenderModule>("CarreroRender");
+	}
 };
